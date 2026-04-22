@@ -3,893 +3,621 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PCOS Nutrition Calculator</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>PCOS Fat Loss & Health — Free E-Book</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-  :root {
-    --cream: #faf7f2;
-    --warm-white: #fff9f4;
-    --terracotta: #c8634a;
-    --terracotta-light: #e8917c;
-    --terracotta-pale: #f5e4df;
-    --sage: #6b8c6e;
-    --sage-light: #a8c4aa;
-    --sage-pale: #e8f0e9;
-    --text-dark: #2c2118;
-    --text-mid: #5c4a3a;
-    --text-light: #8c7a6a;
-    --border: #e8ddd4;
-    --gold: #c4996a;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text-dark);
-    min-height: 100vh;
-    padding: 0;
-  }
+:root {
+  --cream: #faf7f2;
+  --warm-white: #fff9f4;
+  --terracotta: #c8634a;
+  --terracotta-light: #e8917c;
+  --terracotta-pale: #f5e4df;
+  --sage: #6b8c6e;
+  --sage-pale: #e8f0e9;
+  --text-dark: #2c2118;
+  --text-mid: #5c4a3a;
+  --text-light: #8c7a6a;
+  --border: #e8ddd4;
+  --gold: #c4996a;
+}
 
-  /* Decorative background */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; right: 0;
-    width: 40vw; height: 40vw;
-    background: radial-gradient(circle, rgba(200,99,74,0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 35vw; height: 35vw;
-    background: radial-gradient(circle, rgba(107,140,110,0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+body {
+  font-family: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  min-height: 100vh;
+}
 
-  .container {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 48px 24px 80px;
-    position: relative;
-    z-index: 1;
-  }
+/* Decorative blobs */
+body::before {
+  content: '';
+  position: fixed;
+  top: -10vw; right: -10vw;
+  width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(200,99,74,0.07) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -10vw; left: -10vw;
+  width: 45vw; height: 45vw;
+  background: radial-gradient(circle, rgba(107,140,110,0.07) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
 
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 48px;
-    animation: fadeUp 0.6s ease both;
-  }
-  .header-eyebrow {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--terracotta);
-    margin-bottom: 12px;
-  }
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 5vw, 42px);
-    font-weight: 600;
-    color: var(--text-dark);
-    line-height: 1.2;
-    margin-bottom: 16px;
-  }
-  .header h1 em {
-    font-style: italic;
-    color: var(--terracotta);
-  }
-  .header p {
-    font-size: 15px;
-    color: var(--text-mid);
-    line-height: 1.65;
-    max-width: 520px;
-    margin: 0 auto;
-    font-weight: 300;
-  }
+/* ── Layout ── */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 60px 24px 80px;
+}
 
-  /* Card */
-  .card {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px;
-    margin-bottom: 24px;
-    animation: fadeUp 0.6s ease both;
-    box-shadow: 0 2px 24px rgba(44,33,24,0.06);
-  }
-  .card:nth-child(2) { animation-delay: 0.1s; }
-  .card:nth-child(3) { animation-delay: 0.2s; }
+/* ── Eyebrow ── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 24px;
+  animation: fadeUp 0.5s ease both;
+}
+.eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1.5px;
+  background: var(--terracotta);
+}
 
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .card-title .icon {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px;
-    flex-shrink: 0;
-  }
-  .icon-terracotta { background: var(--terracotta-pale); }
-  .icon-sage { background: var(--sage-pale); }
+/* ── Hero ── */
+.hero {
+  margin-bottom: 48px;
+  animation: fadeUp 0.6s ease 0.05s both;
+}
+.hero h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 6vw, 52px);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--terracotta);
+}
+.hero p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-mid);
+  font-weight: 300;
+  max-width: 560px;
+}
 
-  /* Form grid */
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  @media (max-width: 520px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .card { padding: 24px; }
-  }
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-group.full { grid-column: 1 / -1; }
+/* ── Book visual ── */
+.book-visual {
+  background: linear-gradient(135deg, var(--terracotta) 0%, #b85540 100%);
+  border-radius: 16px;
+  padding: 32px 36px;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.6s ease 0.1s both;
+  box-shadow: 0 8px 40px rgba(200,99,74,0.25);
+}
+.book-visual::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+}
+.book-visual::after {
+  content: '';
+  position: absolute;
+  bottom: -30px; left: 40%;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.book-spine {
+  flex-shrink: 0;
+  width: 72px; height: 96px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 4px 12px 12px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-left: 4px solid rgba(255,255,255,0.2);
+  position: relative;
+  z-index: 1;
+}
+.book-spine-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 7px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+  opacity: 0.9;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+.book-info {
+  position: relative;
+  z-index: 1;
+}
+.book-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.book-info h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.book-info p {
+  font-size: 13px;
+  opacity: 0.8;
+  font-weight: 300;
+  line-height: 1.5;
+}
 
-  label {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-light);
-  }
+/* ── What's inside ── */
+.inside {
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s ease 0.15s both;
+}
+.inside-title {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
+.inside-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 480px) {
+  .inside-grid { grid-template-columns: 1fr; }
+}
+.inside-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.inside-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.inside-item p {
+  font-size: 13.5px;
+  color: var(--text-mid);
+  line-height: 1.5;
+  font-weight: 300;
+}
+.inside-item strong {
+  font-weight: 500;
+  color: var(--text-dark);
+  display: block;
+  margin-bottom: 2px;
+  font-size: 14px;
+}
 
-  input[type="number"], select {
-    height: 48px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 0 16px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    color: var(--text-dark);
-    background: var(--cream);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-    appearance: none;
-  }
-  input[type="number"]:focus, select:focus {
-    border-color: var(--terracotta);
-    box-shadow: 0 0 0 3px rgba(200,99,74,0.12);
-  }
-  select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238c7a6a' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; }
+/* ── Form card ── */
+.form-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 2px 24px rgba(44,33,24,0.06);
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+.form-card h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+.form-card p {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 24px;
+  font-weight: 300;
+  line-height: 1.6;
+}
 
-  /* Toggle pills */
-  .toggle-group {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .toggle-group input[type="radio"] { display: none; }
-  .toggle-group label {
-    cursor: pointer;
-    padding: 10px 18px;
-    border: 1.5px solid var(--border);
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--text-mid);
-    background: var(--cream);
-    transition: all 0.2s;
-    user-select: none;
-    white-space: nowrap;
-  }
-  .toggle-group input:checked + label {
-    background: var(--terracotta);
-    border-color: var(--terracotta);
-    color: white;
-    box-shadow: 0 2px 10px rgba(200,99,74,0.3);
-  }
+.field-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+@media (max-width: 480px) {
+  .field-row { flex-direction: column; }
+  .form-card { padding: 24px; }
+}
 
-  /* Goal pills — sage colour */
-  .goal-group input:checked + label {
-    background: var(--sage);
-    border-color: var(--sage);
-    color: white;
-    box-shadow: 0 2px 10px rgba(107,140,110,0.3);
-  }
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+.field input {
+  height: 50px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--text-dark);
+  background: var(--cream);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.field input:focus {
+  border-color: var(--terracotta);
+  box-shadow: 0 0 0 3px rgba(200,99,74,0.12);
+}
+.field input::placeholder { color: var(--text-light); opacity: 0.6; }
 
-  /* Calculate button */
-  .btn-calc {
-    width: 100%;
-    height: 56px;
-    background: var(--terracotta);
-    color: white;
-    border: none;
-    border-radius: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
-    box-shadow: 0 4px 20px rgba(200,99,74,0.35);
-    margin-top: 8px;
-  }
-  .btn-calc:hover {
-    background: #b5573f;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(200,99,74,0.45);
-  }
-  .btn-calc:active { transform: translateY(0); }
+.btn-submit {
+  width: 100%;
+  height: 54px;
+  background: var(--terracotta);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  box-shadow: 0 4px 20px rgba(200,99,74,0.35);
+  margin-top: 4px;
+}
+.btn-submit:hover {
+  background: #b5573f;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(200,99,74,0.45);
+}
+.btn-submit:active { transform: translateY(0); }
 
-  /* Results */
-  #results {
-    display: none;
-    animation: fadeUp 0.5s ease both;
-  }
+.form-note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 14px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.form-note::before { content: '🔒'; font-size: 11px; }
 
-  .results-header {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  .results-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 6px;
-  }
-  .results-header p {
-    font-size: 14px;
-    color: var(--text-light);
-  }
+/* ── Success state ── */
+#success-msg {
+  display: none;
+  text-align: center;
+  padding: 32px;
+}
+#success-msg .tick {
+  width: 56px; height: 56px;
+  background: var(--sage-pale);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 16px;
+}
+#success-msg h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+#success-msg p {
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 300;
+  margin-bottom: 0;
+}
 
-  /* Big calories display */
-  .calorie-hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 32px;
-    background: linear-gradient(135deg, var(--terracotta) 0%, #d4745d 100%);
-    border-radius: 16px;
-    margin-bottom: 20px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-  }
-  .calorie-hero::before {
-    content: '';
-    position: absolute;
-    top: -30px; right: -30px;
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-  }
-  .calorie-hero::after {
-    content: '';
-    position: absolute;
-    bottom: -20px; left: -20px;
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-  }
-  .calorie-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    opacity: 0.8;
-    margin-bottom: 8px;
-  }
-  .calorie-number {
-    font-family: 'Playfair Display', serif; 
-    font-size: 72px;
-    font-weight: 600;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-  .calorie-unit {
-    font-size: 13px;
-    opacity: 0.75;
-    font-weight: 300;
-  }
+/* ── Also section ── */
+.also {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--sage-pale);
+  border: 1px solid rgba(107,140,110,0.2);
+  border-radius: 14px;
+  animation: fadeUp 0.6s ease 0.25s both;
+}
+.also-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.also-text p {
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.5;
+  font-weight: 300;
+}
+.also-text a {
+  color: var(--sage);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(107,140,110,0.4);
+}
+.also-text a:hover { border-color: var(--sage); }
 
-  /* Macro grid */
-  .macro-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-  @media (max-width: 420px) {
-    .macro-grid { grid-template-columns: 1fr 1fr; }
-    .calorie-number { font-size: 56px; }
-  }
-
-  .macro-card {
-    padding: 20px 16px;
-    border-radius: 14px;
-    text-align: center;
-    border: 1.5px solid transparent;
-  }
-  .macro-card.protein {
-    background: var(--terracotta-pale);
-    border-color: rgba(200,99,74,0.2);
-  }
-  .macro-card.carbs {
-    background: #fef8ec;
-    border-color: rgba(196,153,106,0.2);
-  }
-  .macro-card.fat {
-    background: var(--sage-pale);
-    border-color: rgba(107,140,110,0.2);
-  }
-  .macro-name {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .macro-card.protein .macro-name { color: var(--terracotta); }
-  .macro-card.carbs .macro-name { color: var(--gold); }
-  .macro-card.fat .macro-name { color: var(--sage); }
-  .macro-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 30px;
-    font-weight: 600;
-    color: var(--text-dark);
-    line-height: 1;
-    margin-bottom: 3px;
-  }
-  .macro-sub {
-    font-size: 11px;
-    color: var(--text-light);
-    font-weight: 300;
-  }
-
-  /* Protein highlight box */
-  .protein-highlight {
-    background: var(--terracotta-pale);
-    border: 1.5px solid rgba(200,99,74,0.25);
-    border-radius: 14px;
-    padding: 20px 24px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
-  .protein-icon {
-    font-size: 22px;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .protein-highlight h4 {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--terracotta);
-    margin-bottom: 6px;
-  }
-  .protein-highlight p {
-    font-size: 13.5px;
-    color: var(--text-mid);
-    line-height: 1.6;
-    font-weight: 300;
-  }
-
-  /* Per meal breakdown */
-  .meal-breakdown {
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-  .meal-breakdown-header {
-    padding: 14px 20px;
-    background: var(--sage-pale);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--sage);
-  }
-  .meal-row {
-    display: grid;
-    grid-template-columns: 1fr auto auto auto;
-    gap: 12px;
-    padding: 14px 20px;
-    border-top: 1px solid var(--border);
-    align-items: center;
-    font-size: 14px;
-  }
-  .meal-row:first-of-type { border-top: none; }
-  .meal-label { color: var(--text-dark); font-weight: 400; }
-  .meal-cal { color: var(--text-mid); font-size: 13px; }
-  .meal-protein {
-    color: var(--terracotta);
-    font-weight: 500;
-    font-size: 13px;
-    text-align: right;
-  }
-  .meal-badge {
-    background: var(--terracotta-pale);
-    color: var(--terracotta);
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 100px;
-  }
-
-  /* Tips */
-  .tips-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .tips-list li {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    font-size: 14px;
-    color: var(--text-mid);
-    line-height: 1.6;
-    font-weight: 300;
-  }
-  .tip-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--terracotta);
-    flex-shrink: 0;
-    margin-top: 7px;
-  }
-  .tip-strong {
-    font-weight: 500;
-    color: var(--text-dark);
-  }
-
-  /* Divider */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 24px 0;
-  }
-
-  /* TDEE info */
-  .tdee-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-  }
-  .tdee-row:last-child { border-bottom: none; }
-  .tdee-label { color: var(--text-mid); }
-  .tdee-value { font-weight: 500; color: var(--text-dark); }
-  .tdee-value.highlight { color: var(--terracotta); }
-
-  /* Disclaimer */
-  .disclaimer {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-light);
-    line-height: 1.6;
-    font-style: italic;
-    margin-top: 32px;
-    padding: 0 24px;
-    font-weight: 300;
-  }
-
-  /* Animations */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+/* Nav */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.nav-icon {
+  width: 36px; height: 36px;
+  background: var(--terracotta);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.nav-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.nav-the {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+.nav-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.nav-title span {
+  font-style: italic;
+  color: var(--terracotta);
+  font-weight: 400;
+}
+.nav-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-mid);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--terracotta); }
+.nav-links a.active { color: var(--terracotta); }
+.nav-links .nav-cta {
+  background: var(--terracotta-pale);
+  color: var(--terracotta);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 12px;
+}
+.nav-links .nav-cta:hover { background: var(--terracotta); color: white; }
+@media (max-width: 480px) {
+  .nav-links a:not(.nav-cta) { display: none; }
+}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="page">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="header-eyebrow">PCOS Fat Loss & Health</div>
-    <h1>Your Personal<br><em>Nutrition Calculator</em></h1>
-    <p>Get your daily calorie target and macro breakdown — built specifically for a PCOS body, with protein at the centre of everything.</p>
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-icon">🔒</div>
+      <div class="nav-name">
+        <span class="nav-the">The</span>
+        <span class="nav-title">Nutrition <span>Vault</span></span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Free Book</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="index.html" class="nav-cta">Get the free book →</a>
+    </div>
+  </nav>
+
+  <div class="eyebrow">Free E-Book</div>
+
+  <div class="hero">
+    <h1>Finally understand<br>your body — and<br><em>take back control</em></h1>
+    <p>A practical, evidence-based guide to PCOS fat loss, hormonal health, and sustainable habits. Written for women who are tired of generic advice that doesn't work for a PCOS body.</p>
   </div>
 
-  <!-- Step 1: About You -->
-  <div class="card">
-    <div class="card-title">
-      <span class="icon icon-terracotta">👤</span>
-      About You
+  <!-- Book visual -->
+  <div class="book-visual">
+    <div class="book-spine">
+      <div class="book-spine-title">PCOS Fat Loss & Health</div>
     </div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Age</label>
-        <input type="number" id="age" placeholder="e.g. 32" min="18" max="70">
-      </div>
-      <div class="form-group">
-        <label>Height</label>
-        <select id="height-unit" onchange="toggleHeightInputs()">
-          <option value="cm">Centimetres</option>
-          <option value="ft">Feet & Inches</option>
-        </select>
-      </div>
-      <div class="form-group" id="height-cm-group">
-        <label>Height (cm)</label>
-        <input type="number" id="height-cm" placeholder="e.g. 165" min="140" max="210">
-      </div>
-      <div class="form-group" id="height-ft-group" style="display:none;">
-        <label>Feet</label>
-        <input type="number" id="height-ft" placeholder="e.g. 5" min="4" max="7">
-      </div>
-      <div class="form-group" id="height-in-group" style="display:none;">
-        <label>Inches</label>
-        <input type="number" id="height-in" placeholder="e.g. 5" min="0" max="11">
-      </div>
-      <div class="form-group">
-        <label>Weight</label>
-        <select id="weight-unit" onchange="toggleWeightInputs()">
-          <option value="kg">Kilograms (kg)</option>
-          <option value="lbs">Pounds (lbs)</option>
-          <option value="st">Stone & Pounds</option>
-        </select>
-      </div>
-      <div class="form-group" id="weight-kg-group">
-        <label>Weight (kg)</label>
-        <input type="number" id="weight-kg" placeholder="e.g. 72" min="40" max="200">
-      </div>
-      <div class="form-group" id="weight-lbs-group" style="display:none;">
-        <label>Weight (lbs)</label>
-        <input type="number" id="weight-lbs" placeholder="e.g. 158" min="88" max="440">
-      </div>
-      <div class="form-group" id="weight-st-group" style="display:none;">
-        <label>Stone</label>
-        <input type="number" id="weight-st" placeholder="e.g. 11" min="6" max="30">
-      </div>
-      <div class="form-group" id="weight-stlbs-group" style="display:none;">
-        <label>Pounds</label>
-        <input type="number" id="weight-stlbs" placeholder="e.g. 4" min="0" max="13">
-      </div>
+    <div class="book-info">
+      <div class="book-tag">Free Download</div>
+      <h2>PCOS Fat Loss & Health<br>A Woman's Guide to Taking Back Control</h2>
+      <p>10 chapters · Evidence-based · Written by a qualified nutritionist</p>
     </div>
   </div>
 
-  <!-- Step 2: Activity & Goal -->
-  <div class="card">
-    <div class="card-title">
-      <span class="icon icon-sage">🏃</span>
-      Activity & Goal
-    </div>
-    <div class="form-grid">
-      <div class="form-group full">
-        <label>How active are you currently?</label>
-        <div class="toggle-group" style="margin-top: 4px;">
-          <input type="radio" name="activity" id="sed" value="1.2">
-          <label for="sed">Sedentary<br><span style="font-size:11px;font-weight:300;opacity:0.7">Desk job, little exercise</span></label>
-          <input type="radio" name="activity" id="light" value="1.375" checked>
-          <label for="light">Lightly Active<br><span style="font-size:11px;font-weight:300;opacity:0.7">1–3 days/week</span></label>
-          <input type="radio" name="activity" id="mod" value="1.55">
-          <label for="mod">Moderately Active<br><span style="font-size:11px;font-weight:300;opacity:0.7">3–5 days/week</span></label>
-          <input type="radio" name="activity" id="active" value="1.725">
-          <label for="active">Very Active<br><span style="font-size:11px;font-weight:300;opacity:0.7">Hard training 6–7 days</span></label>
-        </div>
+  <!-- What's inside -->
+  <div class="inside">
+    <div class="inside-title">What's inside</div>
+    <div class="inside-grid">
+      <div class="inside-item">
+        <div class="inside-dot"></div>
+        <p><strong>Why weight loss is harder with PCOS</strong>The real physiology behind insulin resistance, androgens, and fat storage</p>
       </div>
-      <div class="form-group full">
-        <label>What is your primary goal?</label>
-        <div class="toggle-group goal-group" style="margin-top: 4px;">
-          <input type="radio" name="goal" id="lose-steady" value="lose_steady" checked>
-          <label for="lose-steady">Fat Loss<br><span style="font-size:11px;font-weight:300;opacity:0.7">Steady & sustainable</span></label>
-          <input type="radio" name="goal" id="lose-assertive" value="lose_assertive">
-          <label for="lose-assertive">Assertive Cut<br><span style="font-size:11px;font-weight:300;opacity:0.7">Faster, higher protein</span></label>
-          <input type="radio" name="goal" id="maintain" value="maintain">
-          <label for="maintain">Maintain<br><span style="font-size:11px;font-weight:300;opacity:0.7">Support hormones & energy</span></label>
-          <input type="radio" name="goal" id="recomp" value="recomp">
-          <label for="recomp">Recomposition<br><span style="font-size:11px;font-weight:300;opacity:0.7">Build muscle, lose fat</span></label>
-        </div>
+      <div class="inside-item">
+        <div class="inside-dot"></div>
+        <p><strong>The hunger & craving cycle</strong>Why 3pm crashes happen and exactly how to stop them</p>
       </div>
-    </div>
-    <button class="btn-calc" onclick="calculate()">Calculate My Numbers →</button>
-  </div>
-
-  <!-- Results -->
-  <div id="results">
-    <div class="card">
-      <div class="results-header">
-        <h2>Your Daily Targets</h2>
-        <p id="goal-description"></p>
+      <div class="inside-item">
+        <div class="inside-dot"></div>
+        <p><strong>Your personal nutrition numbers</strong>Includes access to a free calorie & protein calculator built for PCOS</p>
       </div>
-
-      <!-- Calorie hero -->
-      <div class="calorie-hero">
-        <div class="calorie-label">Daily Calorie Target</div>
-        <div class="calorie-number" id="result-calories">—</div>
-        <div class="calorie-unit">calories per day</div>
+      <div class="inside-item">
+        <div class="inside-dot"></div>
+        <p><strong>Fatigue, brain fog & mood</strong>The hormonal reasons you feel drained, and what actually helps</p>
       </div>
-
-      <!-- Macro cards -->
-      <div class="macro-grid">
-        <div class="macro-card protein">
-          <div class="macro-name">Protein</div>
-          <div class="macro-value" id="result-protein">—</div>
-          <div class="macro-sub">grams / day</div>
-        </div>
-        <div class="macro-card carbs">
-          <div class="macro-name">Carbs</div>
-          <div class="macro-value" id="result-carbs">—</div>
-          <div class="macro-sub">grams / day</div>
-        </div>
-        <div class="macro-card fat">
-          <div class="macro-name">Fat</div>
-          <div class="macro-value" id="result-fat">—</div>
-          <div class="macro-sub">grams / day</div>
-        </div>
+      <div class="inside-item">
+        <div class="inside-dot"></div>
+        <p><strong>Acne, hair loss & hirsutism</strong>The androgen pathway explained, with evidence-based treatment options</p>
       </div>
-
-      <!-- Protein highlight -->
-      <div class="protein-highlight">
-        <div class="protein-icon">💪</div>
-        <div>
-          <h4>Protein is your most important number</h4>
-          <p id="protein-message">Protein reduces ghrelin (the hunger hormone), stabilises blood sugar, and protects muscle while you lose fat. Hit this target every day — it's the single highest-impact change you can make.</p>
-        </div>
+      <div class="inside-item">
+        <div class="inside-dot"></div>
+        <p><strong>The full lifestyle blueprint</strong>Nutrition, training, recovery, and habits — sequenced for a PCOS body</p>
       </div>
-
-      <!-- TDEE breakdown -->
-      <div class="divider"></div>
-      <div class="tdee-row">
-        <span class="tdee-label">Maintenance calories (TDEE)</span>
-        <span class="tdee-value" id="result-tdee">—</span>
-      </div>
-      <div class="tdee-row">
-        <span class="tdee-label">Daily deficit / surplus</span>
-        <span class="tdee-value highlight" id="result-deficit">—</span>
-      </div>
-      <div class="tdee-row">
-        <span class="tdee-label">Estimated weekly change</span>
-        <span class="tdee-value" id="result-weekly">—</span>
-      </div>
-    </div>
-
-    <!-- Per-meal breakdown -->
-    <div class="card">
-      <div class="card-title">
-        <span class="icon icon-terracotta">🍽️</span>
-        How to Hit Your Numbers Each Day
-      </div>
-      <div class="meal-breakdown">
-        <div class="meal-breakdown-header">Spread across 3 meals + 1–2 snacks</div>
-        <div class="meal-row">
-          <span class="meal-label">Breakfast</span>
-          <span class="meal-cal" id="meal-breakfast-cal">—</span>
-          <span class="meal-protein" id="meal-breakfast-prot">—</span>
-          <span class="meal-badge">Protein first</span>
-        </div>
-        <div class="meal-row">
-          <span class="meal-label">Lunch</span>
-          <span class="meal-cal" id="meal-lunch-cal">—</span>
-          <span class="meal-protein" id="meal-lunch-prot">—</span>
-          <span class="meal-badge">Veg → protein → carbs</span>
-        </div>
-        <div class="meal-row">
-          <span class="meal-label">Dinner</span>
-          <span class="meal-cal" id="meal-dinner-cal">—</span>
-          <span class="meal-protein" id="meal-dinner-prot">—</span>
-          <span class="meal-badge">Largest meal</span>
-        </div>
-        <div class="meal-row">
-          <span class="meal-label">Snacks (1–2)</span>
-          <span class="meal-cal" id="meal-snack-cal">—</span>
-          <span class="meal-protein" id="meal-snack-prot">—</span>
-          <span class="meal-badge">Pre-3pm crash</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- PCOS-specific tips -->
-    <div class="card">
-      <div class="card-title">
-        <span class="icon icon-sage">✨</span>
-        PCOS-Specific Nutrition Tips
-      </div>
-      <ul class="tips-list" id="pcos-tips">
-        <!-- Populated by JS -->
-      </ul>
-    </div>
-
-    <!-- High-protein foods reference -->
-    <div class="card">
-      <div class="card-title">
-        <span class="icon icon-terracotta">🥚</span>
-        Easy Ways to Hit Your Protein Target
-      </div>
-      <ul class="tips-list">
-        <li><span class="tip-dot"></span><div><span class="tip-strong">3 eggs + 100g Greek yoghurt</span> — ~35g protein, stabilises blood sugar through the morning</div></li>
-        <li><span class="tip-dot"></span><div><span class="tip-strong">150g chicken breast or salmon</span> — ~45g protein in a single serving</div></li>
-        <li><span class="tip-dot"></span><div><span class="tip-strong">200g cottage cheese</span> — ~24g protein, slow-digesting casein protein</div></li>
-        <li><span class="tip-dot"></span><div><span class="tip-strong">200g cooked lentils + 50g feta</span> — ~24g protein, plus fibre for gut health</div></li>
-        <li><span class="tip-dot"></span><div><span class="tip-strong">Protein shake with milk</span> — ~30–35g, useful when hunger is low but targets aren't met</div></li>
-        <li><span class="tip-dot"></span><div><span class="tip-strong">100g tinned tuna</span> — ~26g protein, zero prep, blood-sugar neutral</div></li>
-      </ul>
     </div>
   </div>
 
-  <div class="disclaimer">
-    For informational and educational purposes only. These calculations are estimates based on established formulas (Mifflin-St Jeor). Individual needs vary. Always consult a healthcare provider or registered dietitian before making significant changes to your diet, especially if you have a diagnosed medical condition.
+  <!-- Email form -->
+  <div class="form-card">
+    <h3>Get your free copy</h3>
+    <p>Enter your details below and we'll send it straight to your inbox. No spam, ever — just the book.</p>
+
+    <div id="form-wrap">
+      <!-- Mailchimp form -->
+      <form action="https://gmail.us6.list-manage.com/subscribe/post?u=1a36244b4a1c4e4235951d01a&amp;id=572c69ba2f&amp;f_id=000750e3f0"
+            method="post"
+            id="mc-form"
+            target="_blank"
+            novalidate>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="mce-FNAME">First Name</label>
+            <input type="text" name="FNAME" id="mce-FNAME" placeholder="Your first name">
+          </div>
+          <div class="field">
+            <label for="mce-EMAIL">Email Address *</label>
+            <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="you@email.com" required>
+          </div>
+        </div>
+
+        <!-- Mailchimp bot protection — do not remove -->
+        <div style="position:absolute;left:-5000px;" aria-hidden="true">
+          <input type="text" name="b_1a36244b4a1c4e4235951d01a_572c69ba2f" tabindex="-1" value="">
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          Send me the free book →
+        </button>
+      </form>
+
+      <p class="form-note">Your email is safe. Unsubscribe any time.</p>
+    </div>
+
+    <div id="success-msg">
+      <div class="tick">✓</div>
+      <h4>You're on the list!</h4>
+      <p>Check your inbox — your free copy of PCOS Fat Loss & Health is on its way.</p>
+    </div>
+  </div>
+
+  <!-- Also link to calculator -->
+  <div class="also">
+    <div class="also-icon">🧮</div>
+    <div class="also-text">
+      <p>Want your personal calorie and protein targets right now? <a href="calculator.html" target="_blank">Use the free PCOS Nutrition Calculator</a> — built specifically for a PCOS body.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    For informational and educational purposes only. Not a substitute for professional medical advice.<br>
+    Always consult a qualified healthcare professional before making changes to your diet or exercise routine.
   </div>
 
 </div>
 
 <script>
-  function toggleHeightInputs() {
-    const unit = document.getElementById('height-unit').value;
-    document.getElementById('height-cm-group').style.display = unit === 'cm' ? '' : 'none';
-    document.getElementById('height-ft-group').style.display = unit === 'ft' ? '' : 'none';
-    document.getElementById('height-in-group').style.display = unit === 'ft' ? '' : 'none';
-  }
-
-  function toggleWeightInputs() {
-    const unit = document.getElementById('weight-unit').value;
-    document.getElementById('weight-kg-group').style.display = unit === 'kg' ? '' : 'none';
-    document.getElementById('weight-lbs-group').style.display = unit === 'lbs' ? '' : 'none';
-    document.getElementById('weight-st-group').style.display = unit === 'st' ? '' : 'none';
-    document.getElementById('weight-stlbs-group').style.display = unit === 'st' ? '' : 'none';
-  }
-
-  function getWeightKg() {
-    const unit = document.getElementById('weight-unit').value;
-    if (unit === 'kg') return parseFloat(document.getElementById('weight-kg').value);
-    if (unit === 'lbs') return parseFloat(document.getElementById('weight-lbs').value) * 0.453592;
-    const st = parseFloat(document.getElementById('weight-st').value) || 0;
-    const lbs = parseFloat(document.getElementById('weight-stlbs').value) || 0;
-    return (st * 14 + lbs) * 0.453592;
-  }
-
-  function getHeightCm() {
-    const unit = document.getElementById('height-unit').value;
-    if (unit === 'cm') return parseFloat(document.getElementById('height-cm').value);
-    const ft = parseFloat(document.getElementById('height-ft').value) || 0;
-    const inches = parseFloat(document.getElementById('height-in').value) || 0;
-    return (ft * 12 + inches) * 2.54;
-  }
-
-  function calculate() {
-    const age = parseFloat(document.getElementById('age').value);
-    const weightKg = getWeightKg();
-    const heightCm = getHeightCm();
-
-    if (!age || !weightKg || !heightCm || isNaN(age) || isNaN(weightKg) || isNaN(heightCm)) {
-      alert('Please fill in your age, height, and weight to get your numbers.');
+  // When Mailchimp redirects back (it opens in _blank so this won't fire),
+  // but we handle the UX optimistically on submit for a smoother feel.
+  document.getElementById('mc-form').addEventListener('submit', function(e) {
+    const email = document.getElementById('mce-EMAIL').value;
+    if (!email || !email.includes('@')) {
+      e.preventDefault();
+      document.getElementById('mce-EMAIL').focus();
+      document.getElementById('mce-EMAIL').style.borderColor = '#c8634a';
       return;
     }
-
-    // Mifflin-St Jeor BMR (female)
-    const bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
-
-    const activityEl = document.querySelector('input[name="activity"]:checked');
-    const activityFactor = parseFloat(activityEl ? activityEl.value : 1.375);
-    const tdee = Math.round(bmr * activityFactor);
-
-    const goal = document.querySelector('input[name="goal"]:checked').value;
-
-    let calories, deficitNote, weeklyChange, goalDesc;
-    let proteinMultiplier; // g per kg bodyweight
-
-    switch(goal) {
-      case 'lose_steady':
-        calories = Math.round(tdee - 350);
-        deficitNote = '−350 kcal/day';
-        weeklyChange = '~0.3–0.4 kg fat loss per week';
-        goalDesc = 'A steady, manageable deficit that supports fat loss without spiking cortisol or worsening PCOS symptoms.';
-        proteinMultiplier = 1.8;
-        break;
-      case 'lose_assertive':
-        calories = Math.round(tdee - 600);
-        deficitNote = '−600 kcal/day';
-        weeklyChange = '~0.5–0.7 kg fat loss per week';
-        goalDesc = 'A more assertive cut with high protein to protect muscle. Best done in 8–12 week phases followed by a maintenance break.';
-        proteinMultiplier = 2.2;
-        break;
-      case 'maintain':
-        calories = tdee;
-        deficitNote = 'Maintenance';
-        weeklyChange = 'Weight stable — hormonal recovery focus';
-        goalDesc = 'Eating at maintenance to support hormonal balance, energy, and cycle regularity while building sustainable habits.';
-        proteinMultiplier = 1.6;
-        break;
-      case 'recomp':
-        calories = Math.round(tdee - 150);
-        deficitNote = '−150 kcal/day (near maintenance)';
-        weeklyChange = 'Slow fat loss + muscle gain (progress via strength & measurements)';
-        goalDesc = 'Near-maintenance calories with very high protein to simultaneously build muscle and lose fat — best for resistance training beginners.';
-        proteinMultiplier = 2.0;
-        break;
-    }
-
-    // Ensure minimum 1400 kcal
-    calories = Math.max(calories, 1400);
-
-    const proteinG = Math.round(weightKg * proteinMultiplier);
-    const proteinCals = proteinG * 4;
-
-    // Fat: ~25–30% of calories
-    const fatCals = Math.round(calories * 0.28);
-    const fatG = Math.round(fatCals / 9);
-
-    const remainingCals = calories - proteinCals - fatCals;
-    const carbsG = Math.max(Math.round(remainingCals / 4), 50);
-
-    // Meal split: breakfast 25%, lunch 30%, dinner 30%, snacks 15%
-    const bfCal = Math.round(calories * 0.25);
-    const lunCal = Math.round(calories * 0.30);
-    const dinCal = Math.round(calories * 0.30);
-    const snkCal = calories - bfCal - lunCal - dinCal;
-
-    const bfProt = Math.round(proteinG * 0.27);
-    const lunProt = Math.round(proteinG * 0.30);
-    const dinProt = Math.round(proteinG * 0.30);
-    const snkProt = proteinG - bfProt - lunProt - dinProt;
-
-    // Update DOM
-    document.getElementById('result-calories').textContent = calories.toLocaleString();
-    document.getElementById('result-protein').textContent = proteinG;
-    document.getElementById('result-carbs').textContent = carbsG;
-    document.getElementById('result-fat').textContent = fatG;
-    document.getElementById('result-tdee').textContent = tdee.toLocaleString() + ' kcal';
-    document.getElementById('result-deficit').textContent = deficitNote;
-    document.getElementById('result-weekly').textContent = weeklyChange;
-    document.getElementById('goal-description').textContent = goalDesc;
-
-    document.getElementById('meal-breakfast-cal').textContent = bfCal + ' kcal';
-    document.getElementById('meal-lunch-cal').textContent = lunCal + ' kcal';
-    document.getElementById('meal-dinner-cal').textContent = dinCal + ' kcal';
-    document.getElementById('meal-snack-cal').textContent = snkCal + ' kcal';
-    document.getElementById('meal-breakfast-prot').textContent = bfProt + 'g protein';
-    document.getElementById('meal-lunch-prot').textContent = lunProt + 'g protein';
-    document.getElementById('meal-dinner-prot').textContent = dinProt + 'g protein';
-    document.getElementById('meal-snack-prot').textContent = snkProt + 'g protein';
-
-    // Protein message
-    document.getElementById('protein-message').textContent =
-      `Your target is ${proteinG}g per day — that's ${(proteinMultiplier).toFixed(1)}g per kg of bodyweight. This manages ghrelin (the hunger hormone), stabilises blood sugar, and protects muscle mass during fat loss. It's the single highest-impact number in your PCOS nutrition plan.`;
-
-    // Dynamic PCOS tips
-    const tips = [];
-    if (goal === 'lose_assertive') {
-      tips.push('<span class="tip-strong">Time-limit this phase:</span> 8–12 weeks at this deficit, then eat at maintenance for 4–6 weeks. This reverses metabolic adaptation and embeds habits.');
-    }
-    tips.push('<span class="tip-strong">Eat vegetables before carbohydrates:</span> Start every main meal with non-starchy veg, then protein, then carbs. This simple order flattens your post-meal blood sugar curve — no food changes needed.');
-    tips.push('<span class="tip-strong">Don\'t let blood sugar drop:</span> If 3pm is your crash point, have your snack at 2:30 — before the craving arrives, not after it hits.');
-    tips.push('<span class="tip-strong">Front-load your protein:</span> Getting ' + bfProt + 'g at breakfast suppresses ghrelin for longer and reduces afternoon cravings. Two eggs + Greek yoghurt achieves this easily.');
-    tips.push('<span class="tip-strong">Walk after meals:</span> Even 10–15 minutes after eating lowers your post-meal blood sugar by using muscle contractions to clear glucose from the bloodstream.');
-    tips.push('<span class="tip-strong">Fat is your blood sugar tool:</span> Your ' + fatG + 'g of fat target slows digestion and extends satiety. Olive oil, avocado, nuts, and oily fish are all blood sugar management tools — not indulgences.');
-    if (carbsG < 120) {
-      tips.push('<span class="tip-strong">Protect your carb intake:</span> Your carbs are set to ' + carbsG + 'g — keep them whole food sources (oats, sweet potato, lentils) to maintain energy and fibre without blood sugar spikes.');
-    }
-    tips.push('<span class="tip-strong">Consistency over perfection:</span> 80% consistency over 12 months outperforms 100% consistency for 3 weeks every time. One off-plan meal doesn\'t undo progress — returning to your foundations does.');
-
-    const tipsList = document.getElementById('pcos-tips');
-    tipsList.innerHTML = tips.map(t => `<li><span class="tip-dot"></span><div>${t}</div></li>`).join('');
-
-    // Show results
-    const resultsEl = document.getElementById('results');
-    resultsEl.style.display = 'block';
-    setTimeout(() => resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-  }
+    // Show success state after a short delay (form submits to new tab)
+    setTimeout(function() {
+      document.getElementById('form-wrap').style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
+    }, 800);
+  });
 </script>
 </body>
 </html>
