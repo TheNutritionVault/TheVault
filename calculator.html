@@ -590,9 +590,11 @@
       </div>
     </a>
     <div class="nav-links">
-      <a href="index.html">Free Book</a>
-      <a href="calculator.html" class="active">Calculator</a>
-      <a href="index.html" class="nav-cta">Get the free book →</a>
+      <a href="index.html">Home</a>
+      <a href="pcos-book.html">Free Book</a>
+      <a href="calculator.html" class="active">PCOS Calculator</a>
+      <a href="strategy-calculator.html">Fat Loss Strategy</a>
+      <a href="pcos-book.html" class="nav-cta">Get free book →</a>
     </div>
   </nav>
 
@@ -694,7 +696,7 @@
         </div>
       </div>
     </div>
-    <button class="btn-calc" onclick="calculate()">Calculate My Numbers →</button>
+    <button class="btn-calc" onclick="gateAndCalculate()">Calculate My Numbers →</button>
   </div>
 
   <!-- Results -->
@@ -980,6 +982,62 @@
     const resultsEl = document.getElementById('results');
     resultsEl.style.display = 'block';
     setTimeout(() => resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+
+  function gateAndCalculate() {
+    const age = parseFloat(document.getElementById('age').value);
+    const weightKg = getWeightKg();
+    const heightCm = getHeightCm();
+    if (!age || !weightKg || !heightCm || isNaN(age) || isNaN(weightKg) || isNaN(heightCm)) {
+      alert('Please fill in your age, height, and weight to get your numbers.');
+      return;
+    }
+    showEmailGate('pcos-calculator', function() {
+      calculate();
+    });
+  }
+
+  // ── Email Gate ──────────────────────────────────────────────────────────────
+  function showEmailGate(tag, onSuccess) {
+    if (sessionStorage.getItem('tnv_email_captured')) { onSuccess(); return; }
+    const overlay = document.createElement('div');
+    overlay.id = 'tnv-gate-overlay';
+    overlay.innerHTML = `<div id="tnv-gate-modal"><div id="tnv-gate-icon">🔒</div><div id="tnv-gate-eyebrow">The Nutrition Vault</div><h2 id="tnv-gate-title">Your results are ready</h2><p id="tnv-gate-desc">Enter your email to unlock your personalised numbers — and get new free tools straight to your inbox when they drop.</p><form id="tnv-gate-form"><input type="text" id="tnv-gate-name" placeholder="First name (optional)" autocomplete="given-name"><input type="email" id="tnv-gate-email" placeholder="your@email.com" required autocomplete="email"><button type="submit" id="tnv-gate-btn">Show my results →</button></form><p id="tnv-gate-note">Free forever. No spam. Unsubscribe any time.</p></div>`;
+    const style = document.createElement('style');
+    style.textContent = `#tnv-gate-overlay{position:fixed;inset:0;z-index:9999;background:rgba(44,33,24,0.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;animation:tnvFadeIn 0.3s ease;}#tnv-gate-modal{background:#fff9f4;border-radius:24px;padding:48px 40px;max-width:440px;width:100%;box-shadow:0 24px 80px rgba(44,33,24,0.25);animation:tnvSlideUp 0.35s ease;position:relative;}#tnv-gate-icon{width:52px;height:52px;background:#c8634a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 16px;}#tnv-gate-eyebrow{font-size:10px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#c8634a;text-align:center;margin-bottom:10px;font-family:'DM Sans',sans-serif;}#tnv-gate-title{font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#2c2118;text-align:center;margin-bottom:10px;line-height:1.2;}#tnv-gate-desc{font-size:14px;color:#5c4a3a;font-weight:300;line-height:1.6;text-align:center;margin-bottom:24px;font-family:'DM Sans',sans-serif;}#tnv-gate-form{display:flex;flex-direction:column;gap:10px;}#tnv-gate-form input{height:50px;border:1.5px solid #e8ddd4;border-radius:10px;padding:0 16px;font-family:'DM Sans',sans-serif;font-size:15px;color:#2c2118;background:#faf7f2;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}#tnv-gate-form input:focus{border-color:#c8634a;box-shadow:0 0 0 3px rgba(200,99,74,0.1);}#tnv-gate-form input::placeholder{color:#8c7a6a;opacity:0.7;}#tnv-gate-btn{height:52px;background:#c8634a;color:white;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:background 0.2s,transform 0.15s;box-shadow:0 4px 20px rgba(200,99,74,0.3);margin-top:4px;}#tnv-gate-btn:hover{background:#b5573f;transform:translateY(-1px);}#tnv-gate-btn:disabled{opacity:0.7;cursor:not-allowed;transform:none;}#tnv-gate-note{font-size:12px;color:#8c7a6a;text-align:center;margin-top:12px;font-weight:300;font-style:italic;font-family:'DM Sans',sans-serif;}#tnv-gate-skip{display:block;text-align:center;margin-top:8px;font-size:12px;color:#8c7a6a;cursor:pointer;text-decoration:underline;font-family:'DM Sans',sans-serif;}@keyframes tnvFadeIn{from{opacity:0;}to{opacity:1;}}@keyframes tnvSlideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}`;
+    document.head.appendChild(style);
+    document.body.appendChild(overlay);
+    const skip = document.createElement('span');
+    skip.id = 'tnv-gate-skip';
+    skip.textContent = 'Skip for now';
+    document.getElementById('tnv-gate-modal').appendChild(skip);
+    document.getElementById('tnv-gate-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('tnv-gate-email').value;
+      const fname = document.getElementById('tnv-gate-name').value;
+      const btn = document.getElementById('tnv-gate-btn');
+      btn.textContent = 'Unlocking...'; btn.disabled = true;
+      try { await tnvSubscribe(email, fname, tag); } catch(err) {}
+      sessionStorage.setItem('tnv_email_captured', '1');
+      overlay.remove(); onSuccess();
+    });
+    skip.addEventListener('click', function() {
+      sessionStorage.setItem('tnv_email_captured', 'skipped');
+      overlay.remove(); onSuccess();
+    });
+  }
+
+  async function tnvSubscribe(email, fname, tag) {
+    const u = '1a36244b4a1c4e4235951d01a';
+    const id = '572c69ba2f';
+    const url = `https://gmail.us6.list-manage.com/subscribe/post-json?u=${u}&id=${id}&EMAIL=${encodeURIComponent(email)}&FNAME=${encodeURIComponent(fname)}&tags=${encodeURIComponent(tag)}&c=tnvCallback`;
+    return new Promise((resolve) => {
+      window.tnvCallback = resolve;
+      const script = document.createElement('script');
+      script.src = url;
+      document.head.appendChild(script);
+      setTimeout(resolve, 3000); // timeout fallback
+    });
   }
 </script>
 </body>
